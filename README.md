@@ -11,7 +11,9 @@ someinternalhost_IP = 10.132.0.3
 ```sh
 ssh -A -J apshenniy@35.195.219.130 apshenniy@10.132.0.3
 ```
-##### Подключение по алиасу someinternalhost
+##### `*` Подключение по алиасу someinternalhost
+Добавляем `alias` командой
 ```sh
 alias someinternalhost="ssh -A -J apshenniy@35.195.219.130 apshenniy@10.132.0.3"
 ```
+После этого можно войти на `10.132.0.3` набрав в консоли  `someinternalhost`
