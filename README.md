@@ -29,7 +29,7 @@ testapp_port = 9292
 - `install_mongodb.sh`
 - `install_ruby.sh`
 
-##### Для установки instance  одной командой создан скрипт 
+##### * Для установки instance  одной командой создан скрипт 
 `Create-instance.sh`
 Создаем vm, передаем  через startup-script-url данные для устновки всего необходимого и  открываем порт приложения 
 ```sh
