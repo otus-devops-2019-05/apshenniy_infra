@@ -17,3 +17,11 @@ ssh -A -J apshenniy@35.195.219.130 apshenniy@10.132.0.3
 alias someinternalhost="ssh -A -J apshenniy@35.195.219.130 apshenniy@10.132.0.3"
 ```
 После этого можно войти на `10.132.0.3` набрав в консоли  `someinternalhost`
+
+
+### Homework 4
+##### IP vm's в GCP
+```sh
+bastion_IP = 35.195.219.130
+someinternalhost_IP = 10.132.0.4
+```
