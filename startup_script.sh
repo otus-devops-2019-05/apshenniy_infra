@@ -12,7 +12,7 @@ sudo systemctl enable mongod
 sudo apt install -y ruby-full ruby-bundler build-essential
 
 #deploy
-sudo mkdir /home/app
+sudo mkdir -p /home/app
 cd /home/app
 git clone -b monolith https://github.com/express42/reddit.git
 cd reddit && bundle install
