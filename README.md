@@ -20,8 +20,8 @@ alias someinternalhost="ssh -A -J apshenniy@35.195.219.130 apshenniy@10.132.0.3"
 
 
 ### Homework 4
-##### IP vm's в GCP
+##### IP app в GCP
 ```sh
-bastion_IP = 35.195.219.130
-someinternalhost_IP = 10.132.0.4
+testapp_IP = 35.195.219.130
+testapp_port = 9292
 ```
