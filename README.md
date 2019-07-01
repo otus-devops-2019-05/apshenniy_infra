@@ -2,6 +2,38 @@
 # apshenniy_infra
 apshenniy Infra repository
 
+### Homework 5
+##### Cоздаем новую ветку packerbase. Создаем директорию packer с файлом ubuntu16.json
+```sh
+{
+ "builders": [
+ {
+ "type": "googlecompute",
+ "project_id": "infra-244621",
+ "image_name": "reddit-base-{{timestamp}}",
+ "image_family": "reddit-base",
+ "source_image_family": "ubuntu-1604-lts",
+ "zone": "europe-west1-b",
+ "ssh_username": "appuser",
+ "machine_type": "f1-micro"
+ }
+ ],
+ "provisioners": [
+ {
+ "type": "shell",
+ "script": "scripts/install_ruby.sh",
+ "execute_command": "sudo {{.Path}}"
+ },
+ {
+ "type": "shell",
+ "script": "scripts/install_mongodb.sh",
+ "execute_command": "sudo {{.Path}}"
+ }
+ ]
+```
+##### packer build ubuntu16.json создаст образ vm в GCP, c установленным ruby и mongodb
+
+
 ### Homework 4
 ##### Переносим  `setupvpn.sh` и `cloud-bastion.ovpn` в созданную директорию VPN
 ```sh
