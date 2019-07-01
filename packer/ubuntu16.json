@@ -1,18 +1,34 @@
 {
+  "variables": {
+        "machine_type": "f1-micro",
+        "preemptible": "false",
+        "tags": "",
+        "network": "default",
+        "subnetwork": "default",
+        "disk_type": "",
+        "disk_size": "10",
+        "image_description": ""
+  },
  "builders": [
- {
+      {
  "type": "googlecompute",
  "project_id": "infra-244621",
  "image_name": "reddit-base-{{timestamp}}",
  "image_family": "reddit-base",
  "source_image_family": "ubuntu-1604-lts",
  "zone": "europe-west1-b",
- "ssh_username": "appuser",
- "machine_type": "f1-micro"
- }
+ "machine_type": "{{user `machine_type`}}",
+ "preemptible": "{{user `preemptible`}}",
+ "tags": "{{user `tags`}}" 
+ "network": "{{user `network`}}",
+ "subnetwork": "{{user `subnetwork`}}",
+ "disk_type": "{{user `disk_type`}}",
+ "disk_size": "{{user `disk_size`}}",
+ "image_description": "{{user `image_description`}}",
+      }
  ],
  "provisioners": [
- {
+      {
  "type": "shell",
  "script": "scripts/install_ruby.sh",
  "execute_command": "sudo {{.Path}}"
@@ -21,6 +37,6 @@
  "type": "shell",
  "script": "scripts/install_mongodb.sh",
  "execute_command": "sudo {{.Path}}"
- }
+      }
  ]
 }
