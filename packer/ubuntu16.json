@@ -1,31 +1,16 @@
 {
-    "variables": {
-        "machine_type": "f1-micro",
-        "preemptible": "false",
-        "tags": "",
-        "network": "default",
-        "subnetwork": "default",
-        "disk_type": "",
-        "disk_size": "10",
-        "image_description": "te",
-        "source_image_family": "ubuntu"
-    },    
     "builders": [
         {
             "type": "googlecompute",
-            "machine_type": "{{user `machine_type`}}",
-            "preemptible": "{{user `preemptible`}}",
-            "tags": "{{user `tags`}}",
-            "network": "{{user `network`}}",
-            "subnetwork": "{{user `subnetwork`}}",
-            "disk_type": "{{user `disk_type`}}",
-            "disk_size": "{{user `disk_size`}}",
-            "image_description": "{{user `image_description`}}",
+            "machine_type": "f1-micro",
+            "disk_type": "pd-standard",
+            "disk_size": "10",
+            "image_description": "reddit",
             "image_name": "reddit-base-{{timestamp}}",
             "image_family": "reddit-base",
-            "ssh_username": "appuser",
-            "zone": "europe-west1-b",
+            "ssh_username": "{{user `ssh_username`}}",
             "project_id": "{{user `project_id`}}",
+            "zone": "{{user `zone`}}",
             "source_image_family": "{{user `source_image_family`}}"
         }
     ],
