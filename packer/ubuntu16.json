@@ -7,7 +7,8 @@
         "subnetwork": "default",
         "disk_type": "",
         "disk_size": "10",
-        "image_description": ""
+        "image_description": "te",
+        "source_image_family": "ubuntu"
     },    
     "builders": [
         {
@@ -22,9 +23,9 @@
             "image_description": "{{user `image_description`}}",
             "image_name": "reddit-base-{{timestamp}}",
             "image_family": "reddit-base",
-            "ssh_username": "{{user `ssh_username`}}",
+            "ssh_username": "appuser",
+            "zone": "europe-west1-b",
             "project_id": "{{user `project_id`}}",
-            "zone": "{{user `zone`}}",
             "source_image_family": "{{user `source_image_family`}}"
         }
     ],
