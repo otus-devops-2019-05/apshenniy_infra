@@ -8,7 +8,7 @@
     "ssh_username": "appuser",
     "tags": "app",
     "netwoork": "projects/((network_project_id))/global/networks/((network)).",
-    "subnetwork": ""
+    "subnetwork": "",
     "zone": "europe-west-b",
     "source_image_family": "ubuntu-1604-lts"
 }
