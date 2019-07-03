@@ -25,7 +25,7 @@ packer build -var-file=variables.json immutable.json
 ```sh
 "source_image_family": "reddit-base",
 ```
-А так же теги, на основе которых можно было создать правило в  `firewall`
+А так же теги, на основе которых можно будет создать правило в  `firewall`
 ```sh
 "tags": [
  "http-server",
