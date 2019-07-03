@@ -1,0 +1,33 @@
+{
+    "builders": [
+        {
+            "type": "googlecompute",
+            "machine_type": "f1-micro",
+            "disk_type": "pd-standard",
+            "disk_size": "10",
+            "image_description": "reddit-full",
+            "image_name": "reddit-full-{{timestamp}}",
+            "image_family": "reddit-full",
+            "ssh_username": "{{user `ssh_username`}}",
+            "project_id": "{{user `project_id`}}",
+            "zone": "{{user `zone`}}",
+            "source_image_family": "reddit-base",
+            "tags": [
+                "http-server",
+                "reddit-full"
+               ]    
+       }
+    ],    
+     "provisioners": [
+        {
+            "type": "shell",
+            "script": "scripts/deploy.sh",
+            "execute_command": "sudo {{.Path}}"
+        },
+        {
+            "type": "shell",
+            "script": "scripts/deploy_systemd.sh",
+            "execute_command": "sudo {{.Path}}"
+        }
+    ]
+}
