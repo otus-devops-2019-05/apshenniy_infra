@@ -13,3 +13,9 @@ ExecStart=/usr/local/bin/puma
 TimeoutSec=300
 [Install]
 WantedBy=multi-user.target
+
+EOF
+
+
+sudo systemctl enable puma.service
+sudo systemctl start puma.service
