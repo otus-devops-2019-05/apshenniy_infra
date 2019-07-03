@@ -3,36 +3,57 @@
 apshenniy Infra repository
 
 ### Homework 5
-##### Cоздаем новую ветку packerbase. Создаем директорию packer с файлом ubuntu16.json
-```sh
-{
- "builders": [
- {
- "type": "googlecompute",
- "project_id": "infra-244621",
- "image_name": "reddit-base-{{timestamp}}",
- "image_family": "reddit-base",
- "source_image_family": "ubuntu-1604-lts",
- "zone": "europe-west1-b",
- "ssh_username": "appuser",
- "machine_type": "f1-micro"
- }
- ],
- "provisioners": [
- {
- "type": "shell",
- "script": "scripts/install_ruby.sh",
- "execute_command": "sudo {{.Path}}"
- },
- {
- "type": "shell",
- "script": "scripts/install_mongodb.sh",
- "execute_command": "sudo {{.Path}}"
- }
- ]
+##### Cоздаем новую ветку packer-base. Создаем директорию packer с файлом ubuntu16.json 
+В файле `ubuntu16.json` есть переменные которые определенны в `variables.json`
+- ssh_username
+- project_id
+- zone
+- source_image_family
+###### Подключаются при сборке командой:
+```sh 
+packer build -var-file=variables.json ubuntu16.json 
 ```
-##### packer build ubuntu16.json создаст образ vm в GCP, c установленным ruby и mongodb
+###### На выходе получаем `rebbit-base` образ c  `mongo` и `rubby`
 
+# * 
+##### immutable.json (reddit-full)
+Командой ниже соберем `reddit-full` образ (с установком и запуском puma.service) поверх `reddit-base`
+```sh
+packer build -var-file=variables.json immutable.json 
+```
+В части `builders` нам нужно указать
+```sh
+"source_image_family": "reddit-base",
+```
+А так же теги, на основе которых можно было создать правило в  `firewall`
+```sh
+"tags": [
+ "http-server",
+ "reddit-full"
+```
+# *
+##### Создамим  `сreate-redditvm.sh`
+Расположен в config-scripts/
+С помощью gcloud создаем instance на основе шаблона `--image-family reddit-full` и открываем порт `9292`
+```sh
+#!/bin/bash
+
+#create instance
+gcloud compute instances create reddit-full\
+  --boot-disk-size=10GB \
+  --image-family reddit-full \
+  --machine-type=f1-micro \
+  --tags reddit-full \
+  --restart-on-failure \
+  --zone europe-west1-b
+
+#open port for instance
+gcloud compute firewall-rules create reddit-full \
+  --direction=INGRESS --priority=1000 --network=default --action=ALLOW \
+  --rules=tcp:9292 \
+  --source-ranges=0.0.0.0/0 \
+  --target-tags=reddit-full
+```
 
 ### Homework 4
 ##### Переносим  `setupvpn.sh` и `cloud-bastion.ovpn` в созданную директорию VPN
