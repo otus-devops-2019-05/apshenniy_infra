@@ -1,5 +1,6 @@
 terraform {
-  required_version = "0.11.7"
+  #required_version = "0.11.7"
+   required_version = "0.11.11"
 }
 
 provider "google" {
@@ -33,7 +34,7 @@ resource "google_compute_instance" "app" {
     type        = "ssh"
     user        = "appuser"
     agent       = false
-    private_key = "${file(var.privat_key_path)}"
+    private_key = "${file(var.private_key_path)}"
   }
 
   provisioner "file" {
@@ -58,3 +59,9 @@ resource "google_compute_firewall" "firewall_puma" {
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["reddit-app"]
 }
+
+ resource "google_compute_project_metadata_item" "appuser" {
+  key = "ssh-keys"
+  value = "appuser:${file(var.public_key_path)}"
+  project = "${var.project}"
+ }
