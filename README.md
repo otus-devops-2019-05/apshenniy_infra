@@ -35,6 +35,15 @@ variables.tf
  }
 ```
 
+Либо дописываем для 2 пользователей
+```sh
+resource "google_compute_project_metadata" "many_keys" {
+  project = "${var.project}"
+  metadata = {
+    ssh-keys = "appuser1:${file(var.public_key_path)} \n appuser2:${file(var.public_key_path)}"
+  }
+}
+```
 ###### При управлении ключами с помощью `terraform` ключи добавлненные через web будут удалены
 
 
