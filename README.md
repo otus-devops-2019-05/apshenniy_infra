@@ -16,7 +16,7 @@ terraform.tfvars
 terraform.tfvars.example
 variables.tf
 ```
-##### Скачиваем [terraform0.11.11](ehttps://releases.hashicorp.com/terraform/0.11.11/) и кидаем  в /usr/local/bin
+##### Скачиваем [terraform0.11.11](https://releases.hashicorp.com/terraform/0.11.11/) и кидаем  в /usr/local/bin
 
 ###### Команды для управление 
 - `terraform plan` используется для создания плана выполнения
