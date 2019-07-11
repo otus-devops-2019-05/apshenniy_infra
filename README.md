@@ -2,6 +2,43 @@
 # apshenniy_infra
 apshenniy Infra repository
 
+
+
+### Homework 6
+##### Cоздаем новую ветку terraform-1. Создаем директорию terraform, содержимое которой будет следующее по окончанию дз:
+```sh
+files/
+   deploy.sh
+   puma.service
+maint.tf
+outputs.tf
+terraform.tfvars
+terraform.tfvars.example
+variables.tf
+```
+##### Скачиваем [terraform0.11.11](ehttps://releases.hashicorp.com/terraform/0.11.11/) и кидаем  в /usr/local/bin
+
+###### Команды для управление 
+`terraform plan` используется для создания плана выполнения
+`terraform apply` применяется для применения изменений, необходимых для достижения желаемого состояния конфигурации.
+`terraform destroy` используется для уничтожения управляемой Terraform инфраструктуры. 
+`terraform taint` вручную помечает управляемый Terraform ресурс как испорченный, вынуждая его уничтожить и воссоздать при следующем применении.
+
+# *
+##### добавление ssh ключа пользователя `appuser` в метаданные проекта.
+В `main.tf` дописываем
+```sh
+ resource "google_compute_project_metadata_item" "appuser" {
+  key = "ssh-keys"
+  value = "appuser:${file(var.public_key_path)}"
+  project = "${var.project}"
+ }
+```
+
+###### При управлении ключами с помощью `terraform` ключи добавлненные через web будут удалены
+
+
+
 ### Homework 5
 ##### Cоздаем новую ветку packer-base. Создаем директорию packer с файлом ubuntu16.json 
 В файле `ubuntu16.json` есть переменные которые определенны в `variables.json`
@@ -54,6 +91,8 @@ gcloud compute firewall-rules create reddit-full \
   --source-ranges=0.0.0.0/0 \
   --target-tags=reddit-full
 ```
+ 
+
 
 ### Homework 4
 ##### Переносим  `setupvpn.sh` и `cloud-bastion.ovpn` в созданную директорию VPN
