@@ -6,4 +6,3 @@ db_disk_image = "reddit-db-base"
 region = "europe-west1"
 zone = "europe-west1-b"
 source_ranges = ["0.0.0.0/0"]
-
