@@ -3,20 +3,20 @@
 apshenniy Infra repository
 
 ### Homework 7 terraform-2
-##### Cоздаем новую ветку terraform-2
+#### Cоздаем новую ветку terraform-2
 ```sh
 git checkout -b terraform-2
 ```
-##### Создаем 2 шаблона `app.json` `db.json` на основе `ubuntu16.json`
-###### Собираем образ для `Ruby`
+#### Создаем 2 шаблона `app.json` `db.json` на основе `ubuntu16.json`
+ Собираем образ для `Ruby`
 ```sh
 packer build -var-file=variables.json app.json
 ```
-###### Собираем образ для `Mongo`
+Собираем образ для `Mongo`
 ```sh
 packer build -var-file=variables.json db.json
 ```
-##### Создаем модули для дальнейшего подключения к main.tf 
+#### Создаем модули для дальнейшего подключения к main.tf 
 ###### Структура директори:
 ```sh
 terraform/modules
@@ -32,15 +32,15 @@ terraform/modules
               main.tf
               variables.tf
 ```
-###### app/main.tf и db/main.tf отвечают за создание vm для приложения и базы соответсвенно. vpc для управление правилом firewall
-##### Так же мы сделали возможность создавать `stage` и `prod` среду
+app/main.tf и db/main.tf отвечают за создание vm для приложения и базы соответсвенно. vpc для управление правилом firewall
+#### Так же мы сделали возможность создавать `stage` и `prod` среду
 ###### В проекте stage запускаем 
 ```sh
 terraform get - для подключениме модулей
 terraform plan - для планирование изменений
 terraform apply - для создание stage окружения
 ```
--stage maint.tf
+- stage maint.tf
 ```sh
 provider "google" {
   version = "2.0.0"
@@ -67,9 +67,9 @@ module "vpc" {
   source_ranges = ["0.0.0.0/0"]
 }
 ```
-###### На примере видно как запускается сборка vm через подключаемые модули, которые в свою очередь используют ранее созданные пакером образы
+На примере видно как запускается сборка vm через подключаемые модули, которые в свою очередь используют ранее созданные пакером образы
 
-##### `*` Хранение стейт файла в удаленном бекенде для окружений stage и prod, используя Google Cloud Storage 
+#### * Хранение стейт файла в удаленном бекенде для окружений stage и prod, используя Google Cloud Storage 
 ###### Создадим `backend.tf` в директориях stage и prod
 backend.tf
 ```sh
@@ -80,7 +80,7 @@ terraform {
   }
 }
 ```
-При запуске инициализации  `terraform init` файлы tfstate переносятся в Google Cloud Storage. При запуске проекта 'terraform apply'  создается tflock, которые блокирует запуск второго экземпляра.
+При запуске инициализации  `terraform init` файлы `tfstate` переносятся в Google Cloud Storage. При запуске проекта 'terraform apply'  создается `tflock`, которые блокирует запуск второго экземпляра.
 
 
 
