@@ -9,7 +9,7 @@ apshenniy Infra repository
 git checkout -b ansible-1
 mkdir ansible
 ```
-###Создаем  playbook 'clone.yml'
+### Создаем  playbook 'clone.yml'
 Данный playbook клонирует репозиторий в директорию на сервере `app`
 ```sh
 ---
@@ -21,9 +21,8 @@ mkdir ansible
         repo: https://github.com/express42/reddit.git
         dest: /home/appuser/reddit
 ```
-Так же нам необходим `inventory` файл со списком хостов и `ansible.cfg`
-`ansible.cfg` содержит  информацию о пользователе, ssh ключе и пути до `inventory`
-Запускаем playbook командой:
+Так же нам необходим `inventory` файл со списком хостов и `ansible.cfg` который содержит  информацию о пользователе, ssh ключе и пути до `inventory`
+##### Запускаем playbook командой:
 ```sh
 ansible-playbook clone.yml
 ```
