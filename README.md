@@ -2,6 +2,32 @@
 # apshenniy_infra
 apshenniy Infra repository
 
+### Homework 8 ansible-1
+
+#### Cоздаем новую ветку ansbile-1, а так же новую директорию в корне проекта `ansible`
+```sh
+git checkout -b ansible-1
+mkdir ansible
+```
+### Создаем  playbook 'clone.yml'
+Данный playbook клонирует репозиторий в директорию на сервере `app`
+```sh
+---
+- name: Clone
+  hosts: app
+  tasks:
+    - name: Clone repo
+      git:
+        repo: https://github.com/express42/reddit.git
+        dest: /home/appuser/reddit
+```
+Так же нам необходим `inventory` файл со списком хостов и `ansible.cfg` который содержит  информацию о пользователе, ssh ключе и пути до `inventory`
+##### Запускаем playbook командой:
+```sh
+ansible-playbook clone.yml
+```
+После выполнение мы увидим в выводе `changed=1`, если же повторно запустим то статус будет `changed=0`(что значит изменений не было после "прохождения" playbook)
+
 ### Homework 7 terraform-2
 #### Cоздаем новую ветку terraform-2
 ```sh
