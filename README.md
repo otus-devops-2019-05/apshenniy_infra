@@ -39,7 +39,21 @@ ansiblle-playbook reddit_app2.yml --tags db-tag
 ansible-playbook site.yml
 ```
 #### Использование template 
-Так как `mongodb` по умолчанию слушает `localhost`, а мы вынесли `mongo` на отдельный инстанс то нам необходимо изменить конфигурацию `mongodb`. Для этого используем модуль `template` где укажем `src и dest`
+Так как `mongodb` по умолчанию слушает `localhost`, а мы вынесли `mongo` на отдельный инстанс то нам необходимо изменить конфигурацию `mongodb`. Для этого используем модуль `template` в db.yml где укажем `src и dest`
+```sh
+  tasks:
+    - name: Change mongo config file
+      template:
+        src: templates/mongod.conf.j2
+        dest: /etc/mongod.conf
+        mode: 0644
+      notify: restart mongod
+```
+В `mongod.conf.j2` указываем переменную
+```sh
+bindIp: {{ mongo_bind_ip }}
+```
+ которая берет значение из `mongo_bind_ip`, значение которой мы можем поменять в playbook `db.yml`
 
 #### Unit для приложения
 `puma.service` содержит строку для чтения адреса базы данных
