@@ -4,6 +4,62 @@ apshenniy Infra repository
 
 ### Homework 8 ansible-2
 
+##### Cоздаем новую ветку ansbile-2
+```sh
+git checkout -b ansible-2
+```
+#### Один плейбук - один сценарий - множество tasks
+Создадим `playbook` `reddit_app.yml = reddit_app_one_play.yml` с одним сценарием и несколькими тасками. 
+- Так как `tasks` используются разные для разных хостов мы долнжо использовать ключи `--limit` и `--tags`
+```sh
+--limit указывает на host для которого будет применен вызываемый playbook
+--tags указывает на конкретные task в playbook
+```
+#### Один плейбук - несколько сценариев
+`reddit_app2.yaml = reddit_app_multiple_plays.yml` - данный плейбук  разделен уже на множество сценарией, каждый сценарий помечен тегом для конкретного хоста. В связи с этим мы может уже не использовать ключ `--limit`
+```sh
+ansiblle-playbook reddit_app2.yml --tags db-tag
+```
+Указывая db-tag, будет задействован сценарий только с этим тегом.
+
+#### Создание нескольких плейбуков 
+Создадим под каждый сценарий свой `playbook`
+- app.yml
+- db.yml
+- deploy.yml
+###### Данные playbooks объединим в один 
+- site.yml
+```sh
+- import_playbook: db.yml
+- import_playbook: app.yml
+- import_playbook: deploy.yml
+```
+Данный метод позволяет упростить вводимую команду в консоли до
+```sh
+ansible-playbook site.yml
+```
+#### Использование template 
+Так как `mongodb` по умолчанию слушает `localhost`, а мы вынесли `mongo` на отдельный инстанс то нам необходимо изменить конфигурацию `mongodb`. Для этого используем модуль `template` где укажем `src и dest`
+
+#### Unit для приложения
+`puma.service` содержит строку для чтения адреса базы данных
+```sh
+EnvironmentFile=/home/appuser/db_config
+```
+Для того чтобы нам передать ip базы дынных приложению. Нам нужно копировать ip базы из /db_config.j2 в /db_config используя модуль `template`
+```sh
+src: templates/db_config.j2
+dest: /home/appuser/db_config
+```
+
+В свою очередь `templates/db_config.j2`
+```sh
+DATABASE_URL={{ db_host }}
+```
+берет ip из переменной `db_host`, значение котрой мы можем поменять в playbook `app.yml`
+
+
+
 
 ### Homework 8 ansible-1
 
@@ -30,6 +86,9 @@ mkdir ansible
 ansible-playbook clone.yml
 ```
 После выполнение мы увидим в выводе `changed=1`, если же повторно запустим то статус будет `changed=0`(что значит изменений не было после "прохождения" playbook)
+
+
+
 
 ### Homework 7 terraform-2
 #### Cоздаем новую ветку terraform-2
