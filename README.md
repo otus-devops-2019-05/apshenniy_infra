@@ -2,7 +2,7 @@
 # apshenniy_infra
 apshenniy Infra repository
 
-### Homework 8 ansible-2
+### Homework 9 ansible-2
 
 ##### Cоздаем новую ветку ansbile-2
 ```sh
@@ -10,13 +10,13 @@ git checkout -b ansible-2
 ```
 #### Один плейбук - один сценарий - множество tasks
 Создадим `playbook` `reddit_app.yml = reddit_app_one_play.yml` с одним сценарием и несколькими тасками. 
-- Так как `tasks` используются разные для разных хостов мы долнжо использовать ключи `--limit` и `--tags`
+- Так как `tasks` используются разные для разных хостов мы должны использовать ключи `--limit` и `--tags`
 ```sh
 --limit указывает на host для которого будет применен вызываемый playbook
 --tags указывает на конкретные task в playbook
 ```
 #### Один плейбук - несколько сценариев
-`reddit_app2.yaml = reddit_app_multiple_plays.yml` - данный плейбук  разделен уже на множество сценарией, каждый сценарий помечен тегом для конкретного хоста. В связи с этим мы может уже не использовать ключ `--limit`
+`reddit_app2.yaml = reddit_app_multiple_plays.yml` - данный плейбук  разделен уже на множество сценарией, каждый сценарий помечен тегом для конкретного хоста. В связи с этим мы можем  не использовать ключ `--limit`
 ```sh
 ansiblle-playbook reddit_app2.yml --tags db-tag
 ```
@@ -100,6 +100,7 @@ mkdir ansible
 ansible-playbook clone.yml
 ```
 После выполнение мы увидим в выводе `changed=1`, если же повторно запустим то статус будет `changed=0`(что значит изменений не было после "прохождения" playbook)
+
 
 
 
