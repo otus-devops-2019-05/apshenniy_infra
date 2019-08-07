@@ -6,3 +6,5 @@ packer/variables.json
 .terraform/
 .DS_Store
 *.retry
+jdauphant.nginx
+vault.key
