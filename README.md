@@ -59,7 +59,7 @@ roles_path = ./roles
 always = True
 context = 5
 ```
-#### Работа с Community-ролями и настройка revesce proxy на nginx
+#### Работа с Community-ролями и настройка reverse proxy на nginx
 Работа с ними производится с помощью утилиты `ansible-galaxy` и файла `requirements.yml`
 Для `stage` окружения создадим файл`environments/stage/requirements.yml` с содержимым
 ```sh
