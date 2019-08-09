@@ -2,6 +2,113 @@
 # apshenniy_infra
 apshenniy Infra repository
 
+### Homework 10 ansible-3
+##### Cоздаем новую ветку ansbile-3
+```sh
+git checkout -b ansible-3
+```
+#### Создание ролей
+Создадим структуру 2 ролей `app` и `db` с помощью `Ansible galaxy` в директории ansible/roles
+```sh 
+ansible-galaxy init app
+ansible-galaxy init db
+```
+Содержимое плейбуков `app` и `db` перенесем в соответсвующие роли. В самих плейбуках оставим только вызов ролей.
+пример `playbooks/app.yml` 
+```sh
+- name: Configure app
+  hosts: app
+  become: true
+  roles:
+    - app
+```
+#### Создание окружения
+Создадим директории:
+```sh
+ansible/environments/stage
+ansible/environments/prod
+```
+Струртура директории для `stage` окружения:
+```sh
+├── group_vars
+│   ├── all
+│   ├── app
+│   └── db
+├── inventory
+└── requirements.yml
+```
+В groups_vars/app (название должно совпадать с группой хостов в файле inventory) мы записывыем переменную 
+```sh
+db_host: 10.132.0.63
+ ```
+ при этом из плейбука ее можно убрать
+
+ ##### Организация плейбуков
+ Создадим директорию `ansible/playbooks` и перенесем в нее все раннее созданные плейбуки
+ #### ansible.cfg
+ Добавим в главный конфигурационный файл строки
+ ```sh
+ # Отключим проверку SSH Host-keys (поскольку они всегда разные для новых инстансов)
+host_key_checking = False
+# Отключим создание *.retry-файлов (они нечасто нужны, но мешаются под руками)
+retry_files_enabled = False
+# # Явно укажем расположение ролей (можно задать несколько путей через ; )
+roles_path = ./roles
+[diff]
+# Включим обязательный вывод diff при наличии изменений и вывод 5 строк контекста
+always = True
+context = 5
+```
+#### Работа с Community-ролями и настройка reverse proxy на nginx
+Работа с ними производится с помощью утилиты `ansible-galaxy` и файла `requirements.yml`
+Для `stage` окружения создадим файл`environments/stage/requirements.yml` с содержимым
+```sh
+ - src: jdauphant.nginx
+   version: v2.21.1
+```
+И установим роль командой 
+```sh 
+ansible-galaxy install -r environments/stage/requirements.yml
+```
+Для проксирования добавим переменные в `environments/stage/group_vars/app`
+```sh
+nginx_sites:
+default:
+- listen 80
+- server_name "reddit"
+- location / {
+proxy_pass http://127.0.0.1:9292;
+}
+```
+Так же добавим вызов роли в `playbooks/app.yml`
+```sh
+  roles:
+    - app
+    - jdauphant.nginx
+```
+###### Откроем 80 порт
+Для этого в `terraform/module/app/main.tf` в ресурсе `google_compute_firewall.firewall_puma` добавим 80 порт
+```sh
+ports = ["9292", "80"]
+```
+#### Работа с Ansible Vault
+Создадим `vault.key` и запишем в него наш пароль для шифрования секретов.
+В `ansible.cfg` создадим поле
+```sh
+vault_password_file = vault.key
+```
+Для примера создадим `environments/stage/credentials.yml` с паролями пользователей и `playbooks/users.yml` для создания тех самых пользователей.
+
+```sh
+ansible-vault encrypt credentials.yml - зашифровать
+ansible-vault decrypt credentials.yml - расшифровать
+ansible-vault edit credentials.yml - внести изменения
+ansible-vault view credentials.yml - просмотреть
+```
+
+
+
+
 ### Homework 9 ansible-2
 
 ##### Cоздаем новую ветку ansbile-2
