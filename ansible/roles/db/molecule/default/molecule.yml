@@ -1,0 +1,19 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+lint:
+  name: yamllint
+  options:
+    config-data:
+      ignore: ".travis.yml"
+platforms:
+  - name: molecule-instance
+    box: ubuntu/xenial64
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
