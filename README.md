@@ -2,6 +2,84 @@
 # apshenniy_infra
 apshenniy Infra repository
 
+### Homework 10 ansible-4
+##### Cоздаем новую ветку ansbile-4
+```sh
+git checkout -b ansible-4
+```
+####  Установка vagrant и создание локальной инфраструктуры
+В директории ansible создайте файл Vagrantfile с определением двух VM
+
+```sh
+vagrant up
+```
+Так как это первый запуск, то Vagrant попытается  скачать образы с Vagrant Cloud.
+```sh
+==> dbserver: Box 'ubuntu/xenial64' could not be found. Attempting to find and install...
+ dbserver: Box Provider: virtualbox
+ dbserver: Box Version: >= 0
+==> dbserver: Loading metadata 
+```
+проверка наличия images
+```
+vagrant box list 
+```
+ проверка статуса vm's
+```
+vagrant status
+```
+подключение по ssh
+```
+vagrant ssh appserver
+```
+#### Провижининг
+Так как vm's уже созданы после команды `vagrant up`, то необходимо применить провижининг командой `vagrant provision appserver`
+
+```    
+app.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbooks/site.yml"
+      ansible.groups = {
+      "app" => ["appserver"],
+      "app:vars" => { "db_host" => "10.10.10.10"}
+      }
+      ansible.extra_vars = {
+        "deploy_user" => "vagrant",
+      }
+```
+#### * Nginx как reverse proxy
+Для того, что бы можно было зайти на 80 порт на appserver добавим в поле `ansible.extra.vars`
+```
+        "nginx_sites" => {
+          "default" => ["listen 80", "server_name \"reddit\"", "location / { proxy_pass http://127.0.0.1:9292; }"]
+        }
+```
+#### Molecule и тестирование роли
+- В директории `ansible/roles/db` выполним `molecule init scenario --scenario-name default -r db -d vagrant` для создания заготовки тестов для роли db
+- В фалй `db/molecule/default/tests/test_default.py` добавим несколько тестов
+```
+...
+# check if MongoDB is enabled and running
+def test_mongo_running_and_enabled(host):
+ mongo = host.service("mongod")
+ assert mongo.is_running
+ assert mongo.is_enabled
+# check if configuration file contains the required line
+def test_config_file(File):
+ config_file = host.file('/etc/mongod.conf')
+ assert config_file.contains('bindIp: 0.0.0.0')
+ assert config_file.is_file
+ ```
+ - Создадим VM для проверки роли. В директории ansible/roles/db
+выполните команду `molecule create`
+- список созданных инстансов можно посмотреть с помощью команды ` molecule list`
+- подключиться по SSH внутрь VM: `molecule login -h instance`
+- `molecule init` генерит плейбук для применения роли `db/molecule/default/playbook.yml` Добавим в плейбук `become`  переменную `mongo_bnd_ip` 
+- прмиеним playbook `molecule converge`
+- Для запуска тестов выполним: `molecule verify`
+
+
+
+
 ### Homework 10 ansible-3
 ##### Cоздаем новую ветку ansbile-3
 ```sh
